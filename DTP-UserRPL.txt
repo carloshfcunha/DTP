@@ -1,0 +1,119 @@
+\<< 'L' PURGE
+'I' PURGE
+'J' PURGE
+'VF' PURGE
+'KK' PURGE
+"Distribuição" {{"Diâmetro e massas" 1} {"Diâmetro e X" 2}} 1 CHOOSE 'VF' STO
+ IF 'VF==0'
+ THEN
+  HALT
+ END
+'J' STO
+"Informe a matriz com a distribuição de partículas" MSGBOX
+"Distribuição de partículas" {{"M=" "d na col.1 e m ou X na col.2"}} {1 0} {} {} INFORM 'VF' STO
+ IF 'VF==0'
+ THEN
+  HALT
+ END
+'L' STO
+'L(1)' EVAL 'M' STO
+M \->ROW 'N' STO CLEAR
+0 'KK' STO
+1 N 
+ FOR I
+  IF 'M(I,1)>0'
+  THEN
+   IF 'M(I,2)>0'
+   THEN
+    {} 'M(I,1)' EVAL + 'M(I,2)' EVAL + AXL
+     IF 'KK==1'
+     THEN
+      AUGMENT
+     END
+    1 'KK' STO
+   END
+  END
+ NEXT
+'M' STO
+M \->ROW 'N' STO CLEAR
+ IF J 1 ==
+ THEN
+  {} 'L' STO
+  1 N
+  FOR I
+  L 0 + 'L' STO
+  NEXT
+  M 'MM' STO
+  M TRAN L AXL DUP AUGMENT AUGMENT TRAN 'M' STO
+  'N-3.' EVAL 'n' STO 
+  '\GS(I=1.,N,M(I,2.))' EVAL 'MT' STO 
+  1. N
+   FOR I 
+   'M(I,2.)/MT' EVAL 'M(I,3.)' STO
+   NEXT 
+  '1.-M(1.,3.)' EVAL 'M(1.,4.)' STO 
+  2. N
+   FOR I 
+   'M(I-1.,4.)-M(I,3.)' EVAL 'M(I,4.)' STO
+   NEXT 
+  '\GS(I=2.,N,M(I,3.)/M(I,1.))' EVAL 'A' STO 
+  '\GS(I=2.,N,M(I,3.)/M(I,1.)^3.)' EVAL 'B' STO 
+  '(1./B)^(1./3.)' EVAL 'Dpv' STO 
+  '(A/B)^(1./2.)' EVAL 'Dps' STO 
+  '1./A' EVAL 'DpSauter' STO 
+  'Dpv' Dpv = 
+  'Dps' Dps =
+  'DpSauter' DpSauter = 
+  0 'KK' STO
+  1 N EVAL
+  FOR I
+   {} 'M(I,1)' EVAL + 'M(I,4)' EVAL + AXL
+    IF 'KK==1'
+    THEN
+     AUGMENT
+    END
+  1 'KK' STO
+  NEXT
+  M 'MMM' STO
+  'M' STO
+ END
+ IF 'M(N,2)/M(N-1,2)<0.0001'
+ THEN
+  'N-1' EVAL 'N' STO
+ END  
+'\GS(I=1.,N,LN(M(I,1.)))' EVAL 'B' STO 
+'\GS(I=1.,N,LN(M(I,1.))^2.)' EVAL 'D' STO 
+'\GS(I=1.,N,LN(M(I,2.))*LN(M(I,1.)))' EVAL 'A' STO 
+'\GS(I=1.,N,LN(M(I,2.)))' EVAL 'C' STO 
+'\GS(I=1.,N,LN(M(I,2.))^2.)' EVAL 'E' STO 
+'(A-B*C/N)^2./((D-B^2./N)*(E-C^2./N))' EVAL 'R2' STO 
+'(A-B*C/N)/(D-B^2./N)' EVAL 'a' STO 
+'C/N-a*B/N' EVAL 'b' STO 
+'EXP(-b/a)' EVAL 'Dl' STO 
+R2 "GGS: R2" \->TAG 
+a 'm' \->TAG
+Dl "D'" \->TAG 
+'\GS(I=1.,N,LN(M(I,1.))*LN(LN(1./(1.-M(I,2.)))))' EVAL 'A' STO 
+'\GS(I=1.,N,LN(LN(1./(1.-M(I,2.)))))' EVAL 'C' STO 
+'\GS(I=1.,N,LN(LN(1./(1.-M(I,2.))))^2.)' EVAL 'E' STO 
+'(A-B*C/N)^2./((D-B^2./N)*(E-C^2./N))' EVAL 'R2' STO 
+'(A-B*C/N)/(D-B^2./N)' EVAL 'a' STO 
+'C/N-a*B/N' EVAL 'b' STO 
+'EXP(-b/a)' EVAL 'Dl' STO 
+R2 "RRB: R2" \->TAG 
+a "m" \->TAG 
+Dl "D'" \->TAG 
+'\GS(I=1.,N,LN(M(I,1.))*LN(1./M(I,2.)-1.))' EVAL 'A' STO 
+'\GS(I=1.,N,LN(1./M(I,2.)-1.))' EVAL 'C' STO 
+'\GS(I=1.,N,LN(1./M(I,2.)-1.)^2.)' EVAL 'E' STO 
+'(A-B*C/N)^2./((D-B^2./N)*(E-C^2./N))' EVAL 'R2' STO 
+'-(A-B*C/N)/(D-B^2./N)' EVAL 'a' STO 
+'C/N+a*B/N' EVAL 'b' STO 
+'EXP(b/a)' EVAL 'Dl' STO 
+R2 "SIG: R2" \->TAG 
+a "m" \->TAG 
+Dl "D'" \->TAG
+ IF J 1 ==
+ THEN
+  MMM
+ END \>>
